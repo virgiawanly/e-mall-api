@@ -1,7 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backoffice\Mall\MallController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/hello-world', function () {
-    return 'Hello world!';
-});
+Route::apiResource('malls', MallController::class);
