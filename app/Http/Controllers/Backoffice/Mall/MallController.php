@@ -6,19 +6,21 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\BaseResourceController;
 use App\Http\Requests\Backoffice\Mall\CreateMallRequest;
 use App\Http\Requests\Backoffice\Mall\UpdateMallRequest;
-use App\Repositories\MallRepository;
+use App\Services\MallService;
 use Exception;
+use Illuminate\Http\Request;
 
 class MallController extends BaseResourceController
 {
     /**
      * Create a new controller instance.
      *
+     * @param  \App\Services\MallService  $mallService
      * @return void
      */
-    public function __construct(protected MallRepository $repository)
+    public function __construct(protected MallService $mallService)
     {
-        parent::__construct($repository);
+        parent::__construct($this->mallService->repository());
     }
 
     /**
@@ -49,6 +51,22 @@ class MallController extends BaseResourceController
         try {
             $result = $this->service->patch($id, $request->validated());
             return ResponseHelper::success(trans('messages.successfully_updated'), $result, 200);
+        } catch (Exception $e) {
+            return ResponseHelper::internalServerError($e->getMessage(), $e);
+        }
+    }
+
+    /**
+     * List all tenants in a mall.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $mallId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function listTenants(Request $request, int $mallId)
+    {
+        try {
+            return ResponseHelper::data($this->mallService->listMallTenants($mallId, $request->all()));
         } catch (Exception $e) {
             return ResponseHelper::internalServerError($e->getMessage(), $e);
         }
