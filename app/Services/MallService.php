@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\MallRepositoryInterface;
+use App\Repositories\Interfaces\MallTenantRepositoryInterface;
 
 class MallService extends BaseResourceService
 {
@@ -25,5 +26,19 @@ class MallService extends BaseResourceService
     public function repository(): MallRepositoryInterface
     {
         return $this->repository;
+    }
+
+    /**
+     * Get all tenants in a mall.
+     *
+     * @param  int  $mallId
+     * @param  array  $queryParams
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function listMallTenants(int $mallId, array $queryParams)
+    {
+        $size = $queryParams['size'] ?? $this->defaultPageSize;
+
+        return app()->make(MallTenantRepositoryInterface::class)->paginatedMallTenantList($mallId, $size, $queryParams);
     }
 }

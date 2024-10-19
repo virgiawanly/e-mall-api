@@ -39,4 +39,14 @@ class MallTenant extends BaseModel
     {
         return $this->belongsToMany(MallFloor::class, 'mall_tenant_floors', 'mall_tenant_id', 'mall_floor_id');
     }
+
+    /**
+     * Get the images of the tenant.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function images()
+    {
+        return $this->hasMany(MallTenantImage::class);
+    }
 }

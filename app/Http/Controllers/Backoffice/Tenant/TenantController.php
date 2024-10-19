@@ -31,7 +31,7 @@ class TenantController extends BaseResourceController
     public function store(CreateTenantRequest $request)
     {
         try {
-            $result = $this->tenantService->saveTenant($request->validated());
+            $result = $this->tenantService->saveTenant($request);
             return ResponseHelper::success(trans('messages.successfully_created'), $result, 201);
         } catch (Exception $e) {
             return ResponseHelper::internalServerError($e->getMessage(), $e);
@@ -48,7 +48,7 @@ class TenantController extends BaseResourceController
     public function update(UpdateTenantRequest $request, int $id)
     {
         try {
-            $result = $this->tenantService->patchTenant($id, $request->validated());
+            $result = $this->tenantService->patchTenant($id, $request);
             return ResponseHelper::success(trans('messages.successfully_updated'), $result, 200);
         } catch (Exception $e) {
             return ResponseHelper::internalServerError($e->getMessage(), $e);
